@@ -4,7 +4,7 @@ Laravel 13 REST API for the Hamotaghi student room application. This backend use
 
 ## Requirements
 
-- PHP 8.3 or newer with SQLite support
+- PHP 8.4 or newer with SQLite support
 - Composer 2
 - Node.js and npm are only needed when building the Laravel welcome assets; the React client is built from the repository root
 

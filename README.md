@@ -6,7 +6,7 @@
 
 - **Frontend:** React 19، TypeScript، Vite، Tailwind CSS 4، shadcn/Radix UI، Recharts و Sonner
 - **Desktop:** Tauri 2 با Rust؛ تنظیمات آن در `src-tauri/` قرار دارد
-- **Backend:** Laravel 13، PHP 8.3+، Laravel Sanctum و SQLite به صورت پیش‌فرض
+- **Backend:** Laravel 13، PHP 8.4+، Laravel Sanctum و SQLite به صورت پیش‌فرض
 - **Testing:** Bun Test برای منطق TypeScript و Pest/PHPUnit برای API لاراول
 - **ساختار:** frontend در ریشه repository و backend مستقل در `backend/` است. frontend از `VITE_API_URL` برای اتصال به API استفاده می‌کند.
 
@@ -23,7 +23,7 @@
 ## پیش‌نیازها
 
 - Bun برای frontend (یا Node.js/npm سازگار با اسکریپت‌های موجود)
-- PHP 8.3 یا جدیدتر با SQLite و Composer 2
+- PHP 8.4 یا جدیدتر با SQLite و Composer 2
 - Rust و ابزارهای Tauri برای ساخت نسخه دسکتاپ
 - Git
 

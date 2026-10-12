@@ -113,7 +113,7 @@ bun run tauri build
 | `POST` | `/rooms/{room}/leave` | ترک اتاق |
 | `POST` | `/rooms/{room}/activity/read` | ذخیره نشانگر خوانده‌شدن |
 
-مرور کامل API، مدل داده و تنظیمات Sanctum در [backend/README.md](backend/README.md) آمده است. داده‌های مالی با مقدار صحیح تومانی ذخیره می‌شوند و scope اتاق از دسترسی به داده‌های اتاق دیگر جلوگیری می‌کند.
+مرور کامل API، مدل داده و تنظیمات Sanctum در [backend/README.md](backend/README.md) آمده است. هنگام اجرای backend به صورت محلی، مستندات تعاملی Swagger در `http://localhost:8000/docs/api` و JSON تولیدشده OpenAPI در `http://localhost:8000/docs/api.json` در دسترس هستند. داده‌های مالی با مقدار صحیح تومانی ذخیره می‌شوند و scope اتاق از دسترسی به داده‌های اتاق دیگر جلوگیری می‌کند.
 
 ## دستورات و کیفیت
 

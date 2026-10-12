@@ -9,12 +9,7 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem={false}
-      storageKey="hamotaghi-theme"
-    >
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="hamotaghi-theme">
       <DirectionProvider dir="rtl">
         <TooltipProvider>
           <App />

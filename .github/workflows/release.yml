@@ -109,7 +109,9 @@ jobs:
 
       - name: Synchronize release version
         if: steps.version.outputs.should_release == 'true'
-        run: node scripts/sync-version.mjs "${{ steps.version.outputs.version }}"
+        run: |
+          node scripts/sync-version.mjs "${{ steps.version.outputs.version }}"
+          bunx prettier --write package.json src-tauri/tauri.conf.json
 
       - name: Commit synchronized release version
         id: release_commit

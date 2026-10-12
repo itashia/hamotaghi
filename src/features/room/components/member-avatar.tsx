@@ -10,7 +10,11 @@ const colors: Record<string, string> = {
 };
 
 export function MemberAvatar({ member, size = "default" }: { member: RoomMember; size?: "default" | "sm" | "lg" }) {
-  return <Avatar size={size}>
-    <AvatarFallback className={`font-semibold ${colors[member.color ?? ""] ?? "bg-primary/10 text-primary"}`}>{member.fullName.trim().slice(0, 1)}</AvatarFallback>
-  </Avatar>;
+  return (
+    <Avatar size={size}>
+      <AvatarFallback className={`font-semibold ${colors[member.color ?? ""] ?? "bg-primary/10 text-primary"}`}>
+        {member.fullName.trim().slice(0, 1)}
+      </AvatarFallback>
+    </Avatar>
+  );
 }

@@ -4,11 +4,17 @@ import type { ChoreRotation, RecurrenceFrequency } from "../types";
 export function eligibleRotationMembers(rotation: ChoreRotation, members: RoomMember[]) {
   const active = new Set(members.filter((member) => member.status === "active").map((member) => member.id));
   const ordered = rotation.orderIds.filter((id, index, all) => active.has(id) && all.indexOf(id) === index);
-  const newMembers = members.filter((member) => member.status === "active" && !ordered.includes(member.id)).map((member) => member.id);
+  const newMembers = members
+    .filter((member) => member.status === "active" && !ordered.includes(member.id))
+    .map((member) => member.id);
   return [...ordered, ...newMembers];
 }
 
-export function nextRotationAssignee(rotation: ChoreRotation, members: RoomMember[], lastAssignedId = rotation.lastAssignedId): string | null {
+export function nextRotationAssignee(
+  rotation: ChoreRotation,
+  members: RoomMember[],
+  lastAssignedId = rotation.lastAssignedId,
+): string | null {
   const eligible = eligibleRotationMembers(rotation, members);
   if (!eligible.length) return null;
   const previousIndex = eligible.indexOf(lastAssignedId);
@@ -22,4 +28,6 @@ export function getNextOccurrenceDate(date: string, frequency: RecurrenceFrequen
   return `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, "0")}-${String(parsed.getDate()).padStart(2, "0")}`;
 }
 
-export function occurrenceKey(seriesId: string, dueDate: string) { return `${seriesId}:${dueDate}`; }
+export function occurrenceKey(seriesId: string, dueDate: string) {
+  return `${seriesId}:${dueDate}`;
+}

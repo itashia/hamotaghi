@@ -22,19 +22,43 @@ export function loadAppState(): LocalAppState {
   if (typeof stored !== "object" || stored === null || Array.isArray(stored)) return emptyState;
   const record = stored as Record<string, unknown>;
   const rawUser = record.user;
-  const user: AppUser | null = typeof rawUser === "object" && rawUser !== null && !Array.isArray(rawUser)
-    ? (() => { const candidate = rawUser as Record<string, unknown>; return typeof candidate.id === "string" && typeof candidate.fullName === "string" && typeof candidate.identifier === "string" ? { id: candidate.id, fullName: candidate.fullName, identifier: candidate.identifier } : null; })()
-    : null;
+  const user: AppUser | null =
+    typeof rawUser === "object" && rawUser !== null && !Array.isArray(rawUser)
+      ? (() => {
+          const candidate = rawUser as Record<string, unknown>;
+          return typeof candidate.id === "string" &&
+            typeof candidate.fullName === "string" &&
+            typeof candidate.identifier === "string"
+            ? { id: candidate.id, fullName: candidate.fullName, identifier: candidate.identifier }
+            : null;
+        })()
+      : null;
   const rawRoom = record.room;
-  const normalizedRoom = typeof rawRoom === "object" && rawRoom !== null && !Array.isArray(rawRoom) ? normalizeRoom(rawRoom) : null;
-  const room = normalizedRoom ? getRoomById(normalizedRoom.id) ?? normalizedRoom : null;
+  const normalizedRoom =
+    typeof rawRoom === "object" && rawRoom !== null && !Array.isArray(rawRoom) ? normalizeRoom(rawRoom) : null;
+  const room = normalizedRoom ? (getRoomById(normalizedRoom.id) ?? normalizedRoom) : null;
   const rawMembership = record.membership;
-  const membership: Membership | null = typeof rawMembership === "object" && rawMembership !== null && !Array.isArray(rawMembership)
-    ? (() => { const candidate = rawMembership as Record<string, unknown>; return typeof candidate.userId === "string" && typeof candidate.roomId === "string" && (candidate.role === "owner" || candidate.role === "member") ? { userId: candidate.userId, roomId: candidate.roomId, role: candidate.role } : null; })()
-    : null;
-  const validMembership = membership && membership.userId === user?.id && membership.roomId === room?.id ? membership : null;
-  const state = { user, room, membership: validMembership, onboardingComplete: record.onboardingComplete === true && Boolean(user && room && validMembership) };
-  if (typeof rawUser === "object" && rawUser !== null && "password" in rawUser) localStorage.setItem(APP_KEY, JSON.stringify(state));
+  const membership: Membership | null =
+    typeof rawMembership === "object" && rawMembership !== null && !Array.isArray(rawMembership)
+      ? (() => {
+          const candidate = rawMembership as Record<string, unknown>;
+          return typeof candidate.userId === "string" &&
+            typeof candidate.roomId === "string" &&
+            (candidate.role === "owner" || candidate.role === "member")
+            ? { userId: candidate.userId, roomId: candidate.roomId, role: candidate.role }
+            : null;
+        })()
+      : null;
+  const validMembership =
+    membership && membership.userId === user?.id && membership.roomId === room?.id ? membership : null;
+  const state = {
+    user,
+    room,
+    membership: validMembership,
+    onboardingComplete: record.onboardingComplete === true && Boolean(user && room && validMembership),
+  };
+  if (typeof rawUser === "object" && rawUser !== null && "password" in rawUser)
+    localStorage.setItem(APP_KEY, JSON.stringify(state));
   localStorage.removeItem(USERS_KEY);
   return state;
 }

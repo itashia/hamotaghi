@@ -4,7 +4,14 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { MemberAvatar } from "@/features/room/components/member-avatar";
 import type { RoomWorkspace } from "@/features/room/types";
 import { changeSupervisorOrder, manuallySetSupervisor, refreshSupervisor } from "../domain/rotation";
@@ -18,15 +25,231 @@ export function SupervisorPage({ room, user, onRoomChange }: RoomWorkspace) {
   const order = room.supervisorRotationOrder ?? active.map((member) => member.id);
   const history = [...(room.supervisorHistory ?? [])].reverse();
   const owner = room.ownerId === user.id;
-  useEffect(() => { const value = refreshSupervisor(room); if (value.currentSupervisorId !== room.currentSupervisorId || value.nextSupervisorId !== room.nextSupervisorId || value.supervisorPeriod !== room.supervisorPeriod || JSON.stringify(value.supervisorRotationOrder) !== JSON.stringify(room.supervisorRotationOrder)) onRoomChange(value); }, [room, onRoomChange]);
-  function move(index: number, direction: number) { const target = index + direction; if (target < 0 || target >= order.length) return; const ids = [...order]; [ids[index], ids[target]] = [ids[target], ids[index]]; onRoomChange(changeSupervisorOrder(room, ids, user.id)); toast.success("ترتیب نوبت‌ها به‌روز شد"); }
-  function confirm() { if (!selected) return; onRoomChange(manuallySetSupervisor(room, selected, user.id)); toast.success("سرپرست این هفته تغییر کرد"); setChoosing(false); setSelected(""); }
-  return <div className="space-y-6">
-    <header><Badge variant="secondary" className="mb-3 rounded-full bg-primary/10 text-primary">نوبت‌های اتاق</Badge><h1 className="font-heading text-2xl font-bold sm:text-3xl">این هفته نوبت کیه؟</h1><p className="mt-1.5 text-sm text-muted-foreground">هر هفته یکی حواسش به کارای اتاقه؛ نوبتا منصفانه می‌چرخه.</p></header>
-    <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]"><Card className="overflow-hidden rounded-2xl border-0"><CardContent className="relative p-5 sm:p-7"><span className="absolute -end-10 -top-12 size-48 rounded-full border border-primary/10" /><div className="relative flex flex-col gap-5 sm:flex-row sm:items-center"><span className="grid size-14 place-items-center rounded-2xl bg-amber-500/10 text-amber-700 dark:text-amber-300"><Crown className="size-7" /></span><div className="min-w-0 flex-1"><p className="text-xs text-muted-foreground">سرپرست این هفته · {room.supervisorPeriod ?? "این هفته"}</p><div className="mt-2 flex items-center gap-3">{current && <MemberAvatar member={current} size="lg" />}<h2 className="font-heading text-2xl font-bold">{current?.fullName ?? "هنوز مشخص نشده"}</h2></div></div>{owner && <Button variant="outline" className="rounded-xl" onClick={() => setChoosing(true)}>تغییر سرپرست</Button>}</div><div className="relative mt-6 grid grid-cols-2 gap-3 border-t pt-4"><div><p className="text-[11px] text-muted-foreground">نوبت بعدی</p><p className="mt-1 text-sm font-semibold">{next?.fullName ?? "—"}</p></div><div><p className="text-[11px] text-muted-foreground">دوره‌ی فعلی</p><p className="mt-1 text-sm font-semibold">{room.supervisorPeriod ?? "—"}</p></div></div></CardContent></Card>
-    <Card className="rounded-2xl border-0"><CardHeader className="px-5 pb-2 pt-5"><CardTitle className="flex items-center gap-2 text-base"><RotateCw className="size-4 text-primary" />چرخش منصفانه</CardTitle><p className="mt-1 text-xs leading-5 text-muted-foreground">هر هفته نوبت به نفر بعدی در فهرست فعال می‌رسد.</p></CardHeader><CardContent className="px-5 pb-5"><div className="flex items-center justify-between rounded-xl bg-muted/40 p-3"><span className="flex items-center gap-2 text-xs"><Users className="size-4 text-muted-foreground" />اعضای فعال</span><span className="text-sm font-bold">{new Intl.NumberFormat("fa-IR").format(active.length)} نفر</span></div><p className="mt-3 text-[11px] leading-5 text-muted-foreground">اعضای جدید در انتهای صف قرار می‌گیرند؛ اعضای خارج‌شده از نوبت‌ها حذف می‌شوند.</p></CardContent></Card></section>
-    <Card className="rounded-2xl border-0"><CardHeader className="px-5 pb-3 pt-5"><CardTitle className="text-base">ترتیب نوبت‌ها</CardTitle><p className="mt-1 text-xs text-muted-foreground">{owner ? "با دکمه‌های کنار هر نفر ترتیب را تنظیم کنید." : "فهرست اعضا در گردش سرپرستی."}</p></CardHeader><CardContent className="space-y-2 px-5 pb-5">{order.map((id, index) => { const member = active.find((item) => item.id === id); if (!member) return null; const currentMember = id === room.currentSupervisorId; return <div key={id} className="flex items-center gap-3 rounded-xl border p-3"><span className={"grid size-8 place-items-center rounded-lg text-xs font-bold " + (currentMember ? "bg-amber-500/10 text-amber-700" : "bg-muted text-muted-foreground")}>{index + 1}</span><MemberAvatar member={member} size="sm" /><span className="min-w-0 flex-1 truncate text-sm font-semibold">{member.fullName}</span>{currentMember && <Badge variant="secondary" className="rounded-full bg-amber-500/10 text-amber-700"><Crown className="me-1 size-3" />این هفته</Badge>}{owner && <div className="flex"><Button variant="ghost" size="icon" className="size-8" aria-label="بالا بردن در صف" disabled={index === 0} onClick={() => move(index, -1)}><ArrowUp className="size-4" /></Button><Button variant="ghost" size="icon" className="size-8" aria-label="پایین بردن در صف" disabled={index === order.length - 1} onClick={() => move(index, 1)}><ArrowDown className="size-4" /></Button></div>}</div>; })}</CardContent></Card>
-    <Card className="rounded-2xl border-0"><CardHeader className="px-5 pb-3 pt-5"><CardTitle className="text-base">تاریخچه‌ی سرپرستی</CardTitle><p className="mt-1 text-xs text-muted-foreground">تغییرهای ثبت‌شده در نوبت‌های گذشته</p></CardHeader><CardContent className="px-5 pb-5">{history.length ? <div className="space-y-2">{history.map((item, index) => { const member = room.members.find((person) => person.id === item.memberId); return <div key={item.startedAt + item.memberId + index} className="flex items-center gap-3 rounded-xl bg-muted/35 p-3"><span className="grid size-9 place-items-center rounded-xl bg-primary/10 text-primary"><Check className="size-4" /></span><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{member?.fullName ?? "عضو سابق"}</p><p className="mt-0.5 text-[11px] text-muted-foreground">{new Date(item.startedAt + "T12:00:00").toLocaleDateString("fa-IR")} {item.endedAt ? "تا " + new Date(item.endedAt + "T12:00:00").toLocaleDateString("fa-IR") : "به بعد"} · {item.kind === "manual" ? "تغییر دستی" : "چرخش هفتگی"}</p></div></div>; })}</div> : <p className="rounded-xl border border-dashed p-5 text-center text-xs text-muted-foreground">با شروع نوبت‌ها، تاریخچه در اینجا نمایش داده می‌شود.</p>}</CardContent></Card>
-    <Dialog open={choosing} onOpenChange={(value) => { setChoosing(value); if (!value) setSelected(""); }}><DialogContent><DialogHeader><DialogTitle>سرپرست این هفته را تغییر دهید</DialogTitle><DialogDescription>عضو انتخاب‌شده برای همین هفته سرپرست می‌شود.</DialogDescription></DialogHeader><select aria-label="انتخاب سرپرست" value={selected} onChange={(event) => setSelected(event.target.value)} className="h-11 rounded-xl border bg-background px-3 text-sm"><option value="">انتخاب هم‌اتاقی</option>{active.map((member) => <option key={member.id} value={member.id}>{member.fullName}</option>)}</select><DialogFooter><Button variant="outline" onClick={() => setChoosing(false)}>انصراف</Button><Button disabled={!selected} onClick={confirm}>تأیید تغییر<Check className="size-4" /></Button></DialogFooter></DialogContent></Dialog>
-  </div>;
+  useEffect(() => {
+    const value = refreshSupervisor(room);
+    if (
+      value.currentSupervisorId !== room.currentSupervisorId ||
+      value.nextSupervisorId !== room.nextSupervisorId ||
+      value.supervisorPeriod !== room.supervisorPeriod ||
+      JSON.stringify(value.supervisorRotationOrder) !== JSON.stringify(room.supervisorRotationOrder)
+    )
+      onRoomChange(value);
+  }, [room, onRoomChange]);
+  function move(index: number, direction: number) {
+    const target = index + direction;
+    if (target < 0 || target >= order.length) return;
+    const ids = [...order];
+    [ids[index], ids[target]] = [ids[target], ids[index]];
+    onRoomChange(changeSupervisorOrder(room, ids, user.id));
+    toast.success("ترتیب نوبت‌ها به‌روز شد");
+  }
+  function confirm() {
+    if (!selected) return;
+    onRoomChange(manuallySetSupervisor(room, selected, user.id));
+    toast.success("سرپرست این هفته تغییر کرد");
+    setChoosing(false);
+    setSelected("");
+  }
+  return (
+    <div className="space-y-6">
+      <header>
+        <Badge variant="secondary" className="mb-3 rounded-full bg-primary/10 text-primary">
+          نوبت‌های اتاق
+        </Badge>
+        <h1 className="font-heading text-2xl font-bold sm:text-3xl">این هفته نوبت کیه؟</h1>
+        <p className="mt-1.5 text-sm text-muted-foreground">هر هفته یکی حواسش به کارای اتاقه؛ نوبتا منصفانه می‌چرخه.</p>
+      </header>
+      <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <Card className="overflow-hidden rounded-2xl border-0">
+          <CardContent className="relative p-5 sm:p-7">
+            <span className="absolute -end-10 -top-12 size-48 rounded-full border border-primary/10" />
+            <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
+              <span className="grid size-14 place-items-center rounded-2xl bg-amber-500/10 text-amber-700 dark:text-amber-300">
+                <Crown className="size-7" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs text-muted-foreground">سرپرست این هفته · {room.supervisorPeriod ?? "این هفته"}</p>
+                <div className="mt-2 flex items-center gap-3">
+                  {current && <MemberAvatar member={current} size="lg" />}
+                  <h2 className="font-heading text-2xl font-bold">{current?.fullName ?? "هنوز مشخص نشده"}</h2>
+                </div>
+              </div>
+              {owner && (
+                <Button variant="outline" className="rounded-xl" onClick={() => setChoosing(true)}>
+                  تغییر سرپرست
+                </Button>
+              )}
+            </div>
+            <div className="relative mt-6 grid grid-cols-2 gap-3 border-t pt-4">
+              <div>
+                <p className="text-[11px] text-muted-foreground">نوبت بعدی</p>
+                <p className="mt-1 text-sm font-semibold">{next?.fullName ?? "—"}</p>
+              </div>
+              <div>
+                <p className="text-[11px] text-muted-foreground">دوره‌ی فعلی</p>
+                <p className="mt-1 text-sm font-semibold">{room.supervisorPeriod ?? "—"}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="rounded-2xl border-0">
+          <CardHeader className="px-5 pb-2 pt-5">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <RotateCw className="size-4 text-primary" />
+              چرخش منصفانه
+            </CardTitle>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              هر هفته نوبت به نفر بعدی در فهرست فعال می‌رسد.
+            </p>
+          </CardHeader>
+          <CardContent className="px-5 pb-5">
+            <div className="flex items-center justify-between rounded-xl bg-muted/40 p-3">
+              <span className="flex items-center gap-2 text-xs">
+                <Users className="size-4 text-muted-foreground" />
+                اعضای فعال
+              </span>
+              <span className="text-sm font-bold">{new Intl.NumberFormat("fa-IR").format(active.length)} نفر</span>
+            </div>
+            <p className="mt-3 text-[11px] leading-5 text-muted-foreground">
+              اعضای جدید در انتهای صف قرار می‌گیرند؛ اعضای خارج‌شده از نوبت‌ها حذف می‌شوند.
+            </p>
+          </CardContent>
+        </Card>
+      </section>
+      <Card className="rounded-2xl border-0">
+        <CardHeader className="px-5 pb-3 pt-5">
+          <CardTitle className="text-base">ترتیب نوبت‌ها</CardTitle>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {owner ? "با دکمه‌های کنار هر نفر ترتیب را تنظیم کنید." : "فهرست اعضا در گردش سرپرستی."}
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-2 px-5 pb-5">
+          {order.map((id, index) => {
+            const member = active.find((item) => item.id === id);
+            if (!member) return null;
+            const currentMember = id === room.currentSupervisorId;
+            return (
+              <div key={id} className="flex items-center gap-3 rounded-xl border p-3">
+                <span
+                  className={
+                    "grid size-8 place-items-center rounded-lg text-xs font-bold " +
+                    (currentMember ? "bg-amber-500/10 text-amber-700" : "bg-muted text-muted-foreground")
+                  }
+                >
+                  {index + 1}
+                </span>
+                <MemberAvatar member={member} size="sm" />
+                <span className="min-w-0 flex-1 truncate text-sm font-semibold">{member.fullName}</span>
+                {currentMember && (
+                  <Badge variant="secondary" className="rounded-full bg-amber-500/10 text-amber-700">
+                    <Crown className="me-1 size-3" />
+                    این هفته
+                  </Badge>
+                )}
+                {owner && (
+                  <div className="flex">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-8"
+                      aria-label="بالا بردن در صف"
+                      disabled={index === 0}
+                      onClick={() => move(index, -1)}
+                    >
+                      <ArrowUp className="size-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="size-8"
+                      aria-label="پایین بردن در صف"
+                      disabled={index === order.length - 1}
+                      onClick={() => move(index, 1)}
+                    >
+                      <ArrowDown className="size-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </CardContent>
+      </Card>
+      <Card className="rounded-2xl border-0">
+        <CardHeader className="px-5 pb-3 pt-5">
+          <CardTitle className="text-base">تاریخچه‌ی سرپرستی</CardTitle>
+          <p className="mt-1 text-xs text-muted-foreground">تغییرهای ثبت‌شده در نوبت‌های گذشته</p>
+        </CardHeader>
+        <CardContent className="px-5 pb-5">
+          {history.length ? (
+            <div className="space-y-2">
+              {history.map((item, index) => {
+                const member = room.members.find((person) => person.id === item.memberId);
+                return (
+                  <div
+                    key={item.startedAt + item.memberId + index}
+                    className="flex items-center gap-3 rounded-xl bg-muted/35 p-3"
+                  >
+                    <span className="grid size-9 place-items-center rounded-xl bg-primary/10 text-primary">
+                      <Check className="size-4" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold">{member?.fullName ?? "عضو سابق"}</p>
+                      <p className="mt-0.5 text-[11px] text-muted-foreground">
+                        {new Date(item.startedAt + "T12:00:00").toLocaleDateString("fa-IR")}{" "}
+                        {item.endedAt
+                          ? "تا " + new Date(item.endedAt + "T12:00:00").toLocaleDateString("fa-IR")
+                          : "به بعد"}{" "}
+                        · {item.kind === "manual" ? "تغییر دستی" : "چرخش هفتگی"}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="rounded-xl border border-dashed p-5 text-center text-xs text-muted-foreground">
+              با شروع نوبت‌ها، تاریخچه در اینجا نمایش داده می‌شود.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+      <Dialog
+        open={choosing}
+        onOpenChange={(value) => {
+          setChoosing(value);
+          if (!value) setSelected("");
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>سرپرست این هفته را تغییر دهید</DialogTitle>
+            <DialogDescription>عضو انتخاب‌شده برای همین هفته سرپرست می‌شود.</DialogDescription>
+          </DialogHeader>
+          <select
+            aria-label="انتخاب سرپرست"
+            value={selected}
+            onChange={(event) => setSelected(event.target.value)}
+            className="h-11 rounded-xl border bg-background px-3 text-sm"
+          >
+            <option value="">انتخاب هم‌اتاقی</option>
+            {active.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.fullName}
+              </option>
+            ))}
+          </select>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setChoosing(false)}>
+              انصراف
+            </Button>
+            <Button disabled={!selected} onClick={confirm}>
+              تأیید تغییر
+              <Check className="size-4" />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
 }

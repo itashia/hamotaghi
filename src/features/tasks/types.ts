@@ -15,4 +15,9 @@ export type RoomTask = {
   recurrence?: RecurrenceFrequency;
   completedAt?: string;
 };
-export type ChoreRotation = { seriesId: string; orderIds: string[]; lastAssignedId: string; generatedOccurrenceKeys: string[] };
+export type ChoreRotation = {
+  seriesId: string;
+  orderIds: string[];
+  lastAssignedId: string;
+  generatedOccurrenceKeys: string[];
+};

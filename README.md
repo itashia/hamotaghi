@@ -6,7 +6,7 @@
 
 - **Frontend:** React 19، TypeScript، Vite، Tailwind CSS 4، shadcn/Radix UI، Recharts و Sonner
 - **Desktop:** Tauri 2 با Rust؛ تنظیمات آن در `src-tauri/` قرار دارد
-- **Backend:** Laravel 13، PHP 8.3+، Laravel Sanctum و SQLite به صورت پیش‌فرض
+- **Backend:** Laravel 13، PHP 8.4+، Laravel Sanctum و SQLite به صورت پیش‌فرض
 - **Testing:** Bun Test برای منطق TypeScript و Pest/PHPUnit برای API لاراول
 - **ساختار:** frontend در ریشه repository و backend مستقل در `backend/` است. frontend از `VITE_API_URL` برای اتصال به API استفاده می‌کند.
 
@@ -23,7 +23,7 @@
 ## پیش‌نیازها
 
 - Bun برای frontend (یا Node.js/npm سازگار با اسکریپت‌های موجود)
-- PHP 8.3 یا جدیدتر با SQLite و Composer 2
+- PHP 8.4 یا جدیدتر با SQLite و Composer 2
 - Rust و ابزارهای Tauri برای ساخت نسخه دسکتاپ
 - Git
 
@@ -92,26 +92,26 @@ bun run tauri build
 
 همه endpointها زیر `/api/v1` هستند و پاسخ JSON برمی‌گردانند. خطای validation با status `422` و فیلد `errors`، درخواست بدون احراز هویت با `401` و خطای دسترسی با `403` یا `404` پاسخ داده می‌شود.
 
-| روش | مسیر | کاربرد |
-| --- | --- | --- |
-| `POST` | `/auth/register` | ساخت حساب و آغاز session/token |
-| `POST` | `/auth/login` | ورود با email یا شماره موبایل |
-| `POST` | `/auth/logout` | پایان session یا revoke کردن token |
-| `GET` | `/auth/me` | حساب فعلی |
-| `PATCH` | `/auth/profile` | ویرایش پروفایل |
-| `PUT` | `/auth/password` | تغییر رمز |
-| `POST` | `/auth/forgot-password` | ارسال لینک بازیابی |
-| `POST` | `/auth/reset-password` | تنظیم رمز با token |
-| `GET` | `/rooms/current` | workspace فعلی |
-| `POST` | `/rooms` | ساخت خوابگاه و اتاق |
-| `GET` | `/rooms/invitations/{code}` | پیش‌نمایش دعوت |
-| `POST` | `/rooms/join` | ورود با کد دعوت |
-| `PUT` | `/rooms/{room}/workspace` | ذخیره workspace اتاق |
-| `PATCH` | `/rooms/{room}` | ویرایش مشخصات اتاق |
-| `POST` | `/rooms/{room}/invitation` | چرخش کد دعوت؛ فقط مالک |
-| `DELETE` | `/rooms/{room}/members/{user}` | حذف عضو؛ فقط مالک |
-| `POST` | `/rooms/{room}/leave` | ترک اتاق |
-| `POST` | `/rooms/{room}/activity/read` | ذخیره نشانگر خوانده‌شدن |
+| روش      | مسیر                           | کاربرد                             |
+| -------- | ------------------------------ | ---------------------------------- |
+| `POST`   | `/auth/register`               | ساخت حساب و آغاز session/token     |
+| `POST`   | `/auth/login`                  | ورود با email یا شماره موبایل      |
+| `POST`   | `/auth/logout`                 | پایان session یا revoke کردن token |
+| `GET`    | `/auth/me`                     | حساب فعلی                          |
+| `PATCH`  | `/auth/profile`                | ویرایش پروفایل                     |
+| `PUT`    | `/auth/password`               | تغییر رمز                          |
+| `POST`   | `/auth/forgot-password`        | ارسال لینک بازیابی                 |
+| `POST`   | `/auth/reset-password`         | تنظیم رمز با token                 |
+| `GET`    | `/rooms/current`               | workspace فعلی                     |
+| `POST`   | `/rooms`                       | ساخت خوابگاه و اتاق                |
+| `GET`    | `/rooms/invitations/{code}`    | پیش‌نمایش دعوت                     |
+| `POST`   | `/rooms/join`                  | ورود با کد دعوت                    |
+| `PUT`    | `/rooms/{room}/workspace`      | ذخیره workspace اتاق               |
+| `PATCH`  | `/rooms/{room}`                | ویرایش مشخصات اتاق                 |
+| `POST`   | `/rooms/{room}/invitation`     | چرخش کد دعوت؛ فقط مالک             |
+| `DELETE` | `/rooms/{room}/members/{user}` | حذف عضو؛ فقط مالک                  |
+| `POST`   | `/rooms/{room}/leave`          | ترک اتاق                           |
+| `POST`   | `/rooms/{room}/activity/read`  | ذخیره نشانگر خوانده‌شدن            |
 
 مرور کامل API، مدل داده و تنظیمات Sanctum در [backend/README.md](backend/README.md) آمده است. هنگام اجرای backend به صورت محلی، مستندات تعاملی Swagger در `http://localhost:8000/docs/api` و JSON تولیدشده OpenAPI در `http://localhost:8000/docs/api.json` در دسترس هستند. داده‌های مالی با مقدار صحیح تومانی ذخیره می‌شوند و scope اتاق از دسترسی به داده‌های اتاق دیگر جلوگیری می‌کند.
 
@@ -152,7 +152,37 @@ vendor/bin/pint --dirty --format agent
 
 ## استقرار
 
-برای production، backend را روی یک محیط PHP/Laravel با HTTPS، secretهای محیطی امن، mail transport واقعی و database مناسب اجرا کنید؛ مقادیر پیش‌فرض local را برای production استفاده نکنید. پس از اجرای migrationها، frontend را با `bun run build` بسازید و برای desktop از `bun run tauri build` استفاده کنید. این repository فایل CI یا manifest استقرار خودکار ندارد؛ pipeline و مقصد استقرار باید در محیط پروژه تعریف شوند.
+برای production، backend را روی یک محیط PHP/Laravel با HTTPS، secretهای محیطی امن، mail transport واقعی و database مناسب اجرا کنید؛ مقادیر پیش‌فرض local را برای production استفاده نکنید. پس از اجرای migrationها، frontend را با `bun run build` بسازید و برای desktop از `bun run tauri build` استفاده کنید.
+
+## CI/CD و انتشار خودکار
+
+pipelineهای GitHub Actions در `.github/workflows/` قرار دارند:
+
+- `ci.yml` برای Pull Request و اجرای دستی، نصب dependencyها با cache، فرمت، تست frontend، تست Laravel، بررسی Rust و کنترل همسانی iconها اجرا می‌شود.
+- `release.yml` پس از هر push به `main` یا با `workflow_dispatch` اجرا می‌شود. ابتدا formatterها و generatorها را به شکل خودکار اعمال می‌کند، تغییرات تولیدشده را با commit دارای `[skip ci]` به `main` برمی‌گرداند، سپس تست‌ها و build production را اجرا می‌کند.
+- build انتشار برای Linux، Windows، macOS x64 و macOS arm64 انجام می‌شود و bundleهای Tauri را به GitHub Release پیوست می‌کند.
+
+نسخه بر اساس Conventional Commits تعیین می‌شود: `feat` یک minor release، `fix` و سایر commitهای معمول یک patch release و `BREAKING CHANGE` یا `!` یک major release ایجاد می‌کند. نسخه در `package.json`، `src-tauri/tauri.conf.json`، `src-tauri/Cargo.toml` و `src-tauri/Cargo.lock` همگام می‌شود، سپس tag و release با release notes خودکار ساخته می‌شود. اگر HEAD قبلاً tag شده باشد، اجرای مجدد release تکراری ایجاد نمی‌کند.
+
+مجوز workflowهای CI فقط `contents: read` است. workflow انتشار به `contents: write` نیاز دارد و از `GITHUB_TOKEN` داخلی استفاده می‌کند؛ secret اضافه‌ای برای buildهای unsigned فعلی لازم نیست. برای توزیع signed در آینده، certificate و secretهای signing باید در GitHub Actions Secrets اضافه شوند و هرگز در repository قرار نگیرند. برای اجرای دستی، از مسیر **Actions → Release → Run workflow** استفاده کنید.
+
+### Iconها
+
+`src-tauri/icon-source.png` نسخه commit‌شده‌ی همان `../icon.png` اصلی است و تنها source of truth هویت بصری محسوب می‌شود. دستور زیر با Tauri CLI، بدون تغییر نسبت یا طراحی logo، assetهای وب و platform-specific را بازتولید می‌کند:
+
+```sh
+bun run icons
+```
+
+این generator favicon و Apple Touch Icon، اندازه‌های PWA (`192x192` و `512x512` و maskable)، PNGهای Tauri، `ico` و `icns`، Android adaptive icons با densityهای مختلف و iOS AppIconها را در `public/` و `src-tauri/icons/` تولید می‌کند. workflow CI تفاوت خروجی generator با فایل‌های commit‌شده را بررسی می‌کند تا asset ناقص وارد build نشود.
+
+### رفع اشکال CI/CD
+
+- اگر `bun install --frozen-lockfile` شکست خورد، تغییرات `package.json` را با `bun install` همگام و `bun.lock` را commit کنید.
+- اگر check مربوط به icon شکست خورد، `bun run icons` را اجرا و همه خروجی‌های تغییرکرده در `public/` و `src-tauri/icons/` را commit کنید.
+- برای خطای Tauri روی Linux، dependencyهای WebKitGTK و AppIndicator باید نصب باشند؛ workflow آن‌ها را نصب می‌کند.
+- اگر release ساخته نشد، ابتدا jobهای quality و build را بررسی کنید. tag موجود روی HEAD باعث skip امن اجرای تکراری می‌شود.
+- buildهای فعلی unsigned هستند؛ خطای signing تا زمان افزودن certificateهای معتبر طبیعی است و نباید با قرار دادن credential در کد دور زده شود.
 
 ## رفع اشکال
 

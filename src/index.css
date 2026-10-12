@@ -1,0 +1,247 @@
+@import "./styles/fonts.css";
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Yekan Bakh", ui-sans-serif, sans-serif;
+  --font-heading: "Peyda", "Yekan Bakh", ui-sans-serif, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  color-scheme: light;
+  --radius: 0.5rem;
+  --background: #faf7f2;
+  --foreground: #1f2933;
+  --card: #ffffff;
+  --card-foreground: #1f2933;
+  --popover: #ffffff;
+  --popover-foreground: #1f2933;
+  --primary: #2bb59a;
+  --primary-dark: #1b8c77;
+  --primary-foreground: #0b2420;
+  --secondary: #f3eee6;
+  --secondary-foreground: #1f2933;
+  --muted: #efe8de;
+  --muted-foreground: #7b8794;
+  --accent: #ffb347;
+  --accent-foreground: #1f2933;
+  --destructive: #e5484d;
+  --destructive-foreground: #0b2420;
+  --success: #22a06b;
+  --success-foreground: #0b2420;
+  --border: #e6ddd0;
+  --input: #e6ddd0;
+  --ring: #2bb59a;
+  --chart-1: #2bb59a;
+  --chart-2: #ffb347;
+  --chart-3: #22a06b;
+  --chart-4: #1b8c77;
+  --chart-5: #e5484d;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1f2933;
+  --sidebar-primary: #2bb59a;
+  --sidebar-primary-foreground: #0b2420;
+  --sidebar-accent: #f3eee6;
+  --sidebar-accent-foreground: #1f2933;
+  --sidebar-border: #e6ddd0;
+  --sidebar-ring: #2bb59a;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #12181b;
+  --foreground: #e8eef0;
+  --card: #1b2428;
+  --card-foreground: #e8eef0;
+  --popover: #222c31;
+  --popover-foreground: #e8eef0;
+  --primary: #3ccbae;
+  --primary-dark: #2bb59a;
+  --primary-foreground: #0b2420;
+  --secondary: #243034;
+  --secondary-foreground: #e8eef0;
+  --muted: #243034;
+  --muted-foreground: #9aa8b0;
+  --accent: #ffb347;
+  --accent-foreground: #1f2933;
+  --destructive: #e5484d;
+  --destructive-foreground: #0b2420;
+  --success: #22a06b;
+  --success-foreground: #f3fff8;
+  --border: #314049;
+  --input: #314049;
+  --ring: #3ccbae;
+  --chart-1: #3ccbae;
+  --chart-2: #ffb347;
+  --chart-3: #22a06b;
+  --chart-4: #2bb59a;
+  --chart-5: #e5484d;
+  --sidebar: #1b2428;
+  --sidebar-foreground: #e8eef0;
+  --sidebar-primary: #3ccbae;
+  --sidebar-primary-foreground: #0b2420;
+  --sidebar-accent: #243034;
+  --sidebar-accent-foreground: #e8eef0;
+  --sidebar-border: #314049;
+  --sidebar-ring: #3ccbae;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    min-height: 100vh;
+    min-height: 100dvh;
+    font-weight: 400;
+    line-height: 1.75;
+    overscroll-behavior-y: none;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    touch-action: manipulation;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    line-height: 1.35;
+    font-weight: 700;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--primary) 32%, transparent);
+  color: var(--foreground);
+}
+
+/* Keep the hairline and add a soft warm lift. Ring is a box-shadow, so both live together. */
+[data-slot="card"] {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--foreground) 8%, transparent),
+    0 1px 2px rgb(31 41 51 / 4%),
+    0 12px 28px rgb(31 41 51 / 5%);
+}
+
+.dark [data-slot="card"] {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--foreground) 10%, transparent),
+    0 1px 2px rgb(0 0 0 / 32%),
+    0 14px 32px rgb(0 0 0 / 28%);
+}
+
+[data-slot="button"][data-variant="default"]:not(:disabled):hover {
+  background-color: var(--primary-dark);
+}
+
+/* Orange is reserved for points and highlights. Menus get a light wash of it. */
+[data-slot="dropdown-menu-item"]:not([data-variant="destructive"]):focus,
+[data-slot="dropdown-menu-checkbox-item"]:focus,
+[data-slot="dropdown-menu-radio-item"]:focus,
+[data-slot="dropdown-menu-sub-trigger"]:is(:focus, [data-state="open"], [data-open]),
+[data-slot="select-item"]:focus,
+[data-slot="context-menu-item"]:not([data-variant="destructive"]):focus,
+[data-slot="context-menu-checkbox-item"]:focus,
+[data-slot="context-menu-radio-item"]:focus,
+[data-slot="context-menu-sub-trigger"]:is(:focus, [data-state="open"], [data-open]),
+[data-slot="menubar-item"]:not([data-variant="destructive"]):focus,
+[data-slot="menubar-checkbox-item"]:focus,
+[data-slot="menubar-radio-item"]:focus,
+[data-slot="menubar-sub-trigger"]:is(:focus, [data-state="open"], [data-open]),
+[data-slot="combobox-item"][data-highlighted] {
+  background-color: color-mix(in srgb, var(--accent) 22%, var(--popover));
+  color: var(--foreground);
+}
+
+[data-slot="dropdown-menu-item"]:focus *,
+[data-slot="dropdown-menu-checkbox-item"]:focus *,
+[data-slot="dropdown-menu-radio-item"]:focus *,
+[data-slot="select-item"]:focus *,
+[data-slot="combobox-item"][data-highlighted] * {
+  color: inherit;
+}

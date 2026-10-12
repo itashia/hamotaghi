@@ -39,6 +39,13 @@ Set `VITE_API_URL=http://localhost:8000/api/v1` for local development. Configure
 
 ## API surface
 
+Scramble generates the OpenAPI 3.1 specification automatically from the Laravel routes, controller responses, and validation rules. In the local environment:
+
+- Swagger-style interactive documentation: `http://localhost:8000/docs/api`
+- OpenAPI JSON: `http://localhost:8000/docs/api.json`
+
+The documentation routes are restricted to local environments by default. Set `API_VERSION` to change the specification version shown in the document. Run `php artisan scramble:cache` to warm the generated document and `php artisan scramble:clear` after route or validation changes when using the cache.
+
 All routes are under `/api/v1` and return JSON. Validation failures use Laravel's standard `422` response with a field-keyed `errors` object. Unauthenticated requests receive `401`; requests outside a room's active membership are hidden with `404`; owner-only actions return `403`.
 
 | Method | Path | Purpose |

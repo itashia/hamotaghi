@@ -206,6 +206,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ needs.prepare.outputs.tag }}
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch --tags --force
           if ! git rev-parse "$TAG" >/dev/null 2>&1; then
             git tag -a "$TAG" "${{ needs.prepare.outputs.release_sha }}" -m "Release $TAG"

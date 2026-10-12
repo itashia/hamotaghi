@@ -12,9 +12,9 @@
   "app": {
     "windows": [
       {
-        "title": "app",
-        "width": 800,
-        "height": 600
+        "title": "هم‌اتاقی",
+        "width": 1180,
+        "height": 860
       }
     ],
     "security": {

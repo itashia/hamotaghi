@@ -12,5 +12,13 @@ export type SharedExpense = {
   shares: ExpenseShare[];
   createdAt: string;
 };
-export type Settlement = { id: string; fromMemberId: string; toMemberId: string; amount: number; date: string; note?: string; recordedBy: string };
+export type Settlement = {
+  id: string;
+  fromMemberId: string;
+  toMemberId: string;
+  amount: number;
+  date: string;
+  note?: string;
+  recordedBy: string;
+};
 export type SettlementSuggestion = { fromMemberId: string; toMemberId: string; amount: number };

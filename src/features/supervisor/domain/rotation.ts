@@ -23,7 +23,10 @@ function currentOrder(room: Room, members: RoomMember[]) {
   const eligible = members.filter((member) => member.status === "active");
   const activeIds = new Set(eligible.map((member) => member.id));
   const configured = room.supervisorRotationOrder ?? [];
-  return [...configured.filter((id, index) => activeIds.has(id) && configured.indexOf(id) === index), ...eligible.filter((member) => !configured.includes(member.id)).map((member) => member.id)];
+  return [
+    ...configured.filter((id, index) => activeIds.has(id) && configured.indexOf(id) === index),
+    ...eligible.filter((member) => !configured.includes(member.id)).map((member) => member.id),
+  ];
 }
 
 function periodLabel(weekStart: string) {
@@ -35,41 +38,94 @@ function periodLabel(weekStart: string) {
   return `${formatter.format(start)} تا ${formatter.format(end)} ${year}`;
 }
 
-function pushHistory(history: SupervisorHistoryEntry[], memberId: string, weekStart: string, changedBy: string, kind: "rotation" | "manual") {
+function pushHistory(
+  history: SupervisorHistoryEntry[],
+  memberId: string,
+  weekStart: string,
+  changedBy: string,
+  kind: "rotation" | "manual",
+) {
   const previous = history[history.length - 1];
   if (previous?.memberId === memberId && !previous.endedAt) return history;
-  const nextHistory = previous && !previous.endedAt ? [...history.slice(0, -1), { ...previous, endedAt: weekStart }] : [...history];
+  const nextHistory =
+    previous && !previous.endedAt ? [...history.slice(0, -1), { ...previous, endedAt: weekStart }] : [...history];
   return [...nextHistory, { memberId, startedAt: weekStart, changedBy, kind }];
 }
 
 export function refreshSupervisor(room: Room, date = new Date()): Room {
   const members = room.members.filter((member) => member.status === "active");
   const order = currentOrder(room, room.members);
-  if (!order.length) return { ...room, supervisorRotationOrder: [], currentSupervisorId: "", nextSupervisorId: "", supervisorPeriod: "بدون سرپرست" };
+  if (!order.length)
+    return {
+      ...room,
+      supervisorRotationOrder: [],
+      currentSupervisorId: "",
+      nextSupervisorId: "",
+      supervisorPeriod: "بدون سرپرست",
+    };
   const currentWeek = getWeekStart(date);
-  const anchorDate = room.supervisorAnchorDate && /^\d{4}-\d{2}-\d{2}$/.test(room.supervisorAnchorDate) ? room.supervisorAnchorDate : currentWeek;
+  const anchorDate =
+    room.supervisorAnchorDate && /^\d{4}-\d{2}-\d{2}$/.test(room.supervisorAnchorDate)
+      ? room.supervisorAnchorDate
+      : currentWeek;
   const index = ((weekIndex(anchorDate, currentWeek) % order.length) + order.length) % order.length;
   const naturalSupervisor = order[index];
-  const manualActive = room.manualSupervisorWeekStart === currentWeek && members.some((member) => member.id === room.manualSupervisorId);
+  const manualActive =
+    room.manualSupervisorWeekStart === currentWeek && members.some((member) => member.id === room.manualSupervisorId);
   const current = manualActive ? room.manualSupervisorId! : naturalSupervisor;
   const currentIndex = order.indexOf(current);
   const next = order[(currentIndex + 1) % order.length] ?? current;
   const previousId = room.currentSupervisorId;
-  const history = previousId === current ? room.supervisorHistory ?? [] : pushHistory(room.supervisorHistory ?? [], current, currentWeek, "هم‌اتاقی", manualActive ? "manual" : "rotation");
-  return { ...room, supervisorRotationOrder: order, supervisorAnchorDate: anchorDate, currentSupervisorId: current, nextSupervisorId: next, supervisorPeriod: periodLabel(currentWeek), supervisorHistory: history };
+  const history =
+    previousId === current
+      ? (room.supervisorHistory ?? [])
+      : pushHistory(
+          room.supervisorHistory ?? [],
+          current,
+          currentWeek,
+          "هم‌اتاقی",
+          manualActive ? "manual" : "rotation",
+        );
+  return {
+    ...room,
+    supervisorRotationOrder: order,
+    supervisorAnchorDate: anchorDate,
+    currentSupervisorId: current,
+    nextSupervisorId: next,
+    supervisorPeriod: periodLabel(currentWeek),
+    supervisorHistory: history,
+  };
 }
 
 export function changeSupervisorOrder(room: Room, order: string[], actorId: string, date = new Date()): Room {
   const allowed = new Set(room.members.filter((member) => member.status === "active").map((member) => member.id));
-  const nextOrder = [...order.filter((id, index) => allowed.has(id) && order.indexOf(id) === index), ...room.members.filter((member) => member.status === "active" && !order.includes(member.id)).map((member) => member.id)];
+  const nextOrder = [
+    ...order.filter((id, index) => allowed.has(id) && order.indexOf(id) === index),
+    ...room.members
+      .filter((member) => member.status === "active" && !order.includes(member.id))
+      .map((member) => member.id),
+  ];
   const week = getWeekStart(date);
-  const changed = refreshSupervisor({ ...room, supervisorRotationOrder: nextOrder, supervisorAnchorDate: week, manualSupervisorId: room.currentSupervisorId, manualSupervisorWeekStart: week }, date);
-  const history = room.currentSupervisorId === changed.currentSupervisorId ? room.supervisorHistory ?? [] : pushHistory(room.supervisorHistory ?? [], changed.currentSupervisorId, week, actorId, "rotation");
+  const changed = refreshSupervisor(
+    {
+      ...room,
+      supervisorRotationOrder: nextOrder,
+      supervisorAnchorDate: week,
+      manualSupervisorId: room.currentSupervisorId,
+      manualSupervisorWeekStart: week,
+    },
+    date,
+  );
+  const history =
+    room.currentSupervisorId === changed.currentSupervisorId
+      ? (room.supervisorHistory ?? [])
+      : pushHistory(room.supervisorHistory ?? [], changed.currentSupervisorId, week, actorId, "rotation");
   return { ...changed, supervisorHistory: history };
 }
 
 export function manuallySetSupervisor(room: Room, memberId: string, actorId: string, date = new Date()): Room {
-  if (!room.members.some((member) => member.id === memberId && member.status === "active")) throw new RangeError("سرپرست باید یکی از اعضای فعال اتاق باشد.");
+  if (!room.members.some((member) => member.id === memberId && member.status === "active"))
+    throw new RangeError("سرپرست باید یکی از اعضای فعال اتاق باشد.");
   const week = getWeekStart(date);
   const changed = refreshSupervisor({ ...room, manualSupervisorId: memberId, manualSupervisorWeekStart: week }, date);
   const history = pushHistory(room.supervisorHistory ?? [], memberId, week, actorId, "manual");

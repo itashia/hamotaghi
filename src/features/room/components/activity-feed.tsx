@@ -1,4 +1,15 @@
-import { BellRing, CheckCheck, CircleDollarSign, ClipboardList, DoorOpen, House, Pencil, ShoppingBasket, Trash2, UsersRound } from "lucide-react";
+import {
+  BellRing,
+  CheckCheck,
+  CircleDollarSign,
+  ClipboardList,
+  DoorOpen,
+  House,
+  Pencil,
+  ShoppingBasket,
+  Trash2,
+  UsersRound,
+} from "lucide-react";
 import type { RoomActivity, RoomActivityType } from "@/features/onboarding/types";
 
 const activityStyle: Record<RoomActivityType, { icon: typeof House; tone: string }> = {
@@ -28,18 +39,45 @@ function relativeTime(timestamp: string) {
   return days === 1 ? "دیروز" : `${days} روز پیش`;
 }
 
-export function ActivityFeed({ activities, compact = false, limit }: { activities: RoomActivity[]; compact?: boolean; limit?: number }) {
+export function ActivityFeed({
+  activities,
+  compact = false,
+  limit,
+}: {
+  activities: RoomActivity[];
+  compact?: boolean;
+  limit?: number;
+}) {
   const visible = limit ? activities.slice(0, limit) : activities;
-  if (!visible.length) return <div className="rounded-2xl border border-dashed px-5 py-8 text-center"><p className="text-sm font-medium">اتاق فعلاً ساکته 🤫</p><p className="mt-1 text-xs text-muted-foreground">اتفاقای اتاق کم‌کم اینجا جمع می‌شن.</p></div>;
-  return <ol className={compact ? "divide-y" : "space-y-1"}>
-    {visible.map((item) => {
-      const { icon: Icon, tone } = activityStyle[item.type];
-      return <li key={item.id} className={`flex items-start gap-3 ${compact ? "py-3.5 first:pt-1 last:pb-1" : "rounded-xl px-3 py-3 transition-colors hover:bg-muted/45"}`}>
-        <span className={`mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl ${tone}`}><Icon className="size-[17px]" strokeWidth={1.8} /></span>
-        <div className="min-w-0 flex-1"><p className="text-sm leading-6"><span className="font-semibold">{item.actor}</span> {item.description}</p>{item.detail && <p className="mt-1 text-xs text-muted-foreground">{item.detail}</p>}</div>
-        <time className="shrink-0 pt-1 text-[10px] text-muted-foreground">{relativeTime(item.timestamp)}</time>
-      </li>;
-    })}
-  </ol>;
+  if (!visible.length)
+    return (
+      <div className="rounded-2xl border border-dashed px-5 py-8 text-center">
+        <p className="text-sm font-medium">اتاق فعلاً ساکته 🤫</p>
+        <p className="mt-1 text-xs text-muted-foreground">اتفاقای اتاق کم‌کم اینجا جمع می‌شن.</p>
+      </div>
+    );
+  return (
+    <ol className={compact ? "divide-y" : "space-y-1"}>
+      {visible.map((item) => {
+        const { icon: Icon, tone } = activityStyle[item.type];
+        return (
+          <li
+            key={item.id}
+            className={`flex items-start gap-3 ${compact ? "py-3.5 first:pt-1 last:pb-1" : "rounded-xl px-3 py-3 transition-colors hover:bg-muted/45"}`}
+          >
+            <span className={`mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl ${tone}`}>
+              <Icon className="size-[17px]" strokeWidth={1.8} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm leading-6">
+                <span className="font-semibold">{item.actor}</span> {item.description}
+              </p>
+              {item.detail && <p className="mt-1 text-xs text-muted-foreground">{item.detail}</p>}
+            </div>
+            <time className="shrink-0 pt-1 text-[10px] text-muted-foreground">{relativeTime(item.timestamp)}</time>
+          </li>
+        );
+      })}
+    </ol>
+  );
 }
-

@@ -24,14 +24,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
@@ -50,13 +43,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -77,26 +64,13 @@ import {
 } from "@/components/ui/popover";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Slider } from "@/components/ui/slider";
 import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -167,25 +141,14 @@ function ThemeToggle() {
   const isDark = mounted && resolvedTheme === "dark";
 
   return (
-    <Button
-      variant="outline"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-    >
+    <Button variant="outline" onClick={() => setTheme(isDark ? "light" : "dark")}>
       {isDark ? <SunIcon /> : <MoonIcon />}
       {isDark ? "حالت روشن" : "حالت تیره"}
     </Button>
   );
 }
 
-function Section({
-  title,
-  description,
-  children,
-}: {
-  title: string;
-  description: string;
-  children: React.ReactNode;
-}) {
+function Section({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
   return (
     <section className="space-y-4">
       <div className="space-y-1">
@@ -230,9 +193,7 @@ function ExpenseForm() {
             onChange={(event) => setAmount(event.target.value)}
           />
           <FieldDescription>مبلغ را به تومان بنویسید.</FieldDescription>
-          {amountInvalid ? (
-            <FieldError>مبلغ را وارد کنید.</FieldError>
-          ) : null}
+          {amountInvalid ? <FieldError>مبلغ را وارد کنید.</FieldError> : null}
         </Field>
 
         <Field>
@@ -247,23 +208,13 @@ function ExpenseForm() {
 
         <Field data-invalid>
           <FieldLabel htmlFor="card">شماره کارت</FieldLabel>
-          <Input
-            id="card"
-            defaultValue="۶۰۳۷"
-            aria-invalid
-            className="h-10"
-          />
+          <Input id="card" defaultValue="۶۰۳۷" aria-invalid className="h-10" />
           <FieldError>شماره کارت کامل نیست.</FieldError>
         </Field>
 
         <Field>
           <FieldLabel htmlFor="disabled-field">حساب قفل‌شده</FieldLabel>
-          <Input
-            id="disabled-field"
-            disabled
-            defaultValue="حساب مشترک خانه"
-            className="h-10"
-          />
+          <Input id="disabled-field" disabled defaultValue="حساب مشترک خانه" className="h-10" />
         </Field>
       </FieldGroup>
 
@@ -328,8 +279,8 @@ export function ThemePreview() {
           <div className="max-w-2xl space-y-3">
             <h1 className="text-3xl sm:text-4xl">حساب‌وکتاب، آرام و روشن</h1>
             <p className="text-base text-muted-foreground">
-              متن بدنه با یکان‌بخ نوشته شده تا خواندن توضیح‌ها و فرم‌ها نرم بماند.
-              عنوان‌ها، برچسب‌های مهم و رقم‌ها با پیدا آمده‌اند تا تیزتر و قابل‌تشخیص‌تر باشند.
+              متن بدنه با یکان‌بخ نوشته شده تا خواندن توضیح‌ها و فرم‌ها نرم بماند. عنوان‌ها، برچسب‌های مهم و رقم‌ها با
+              پیدا آمده‌اند تا تیزتر و قابل‌تشخیص‌تر باشند.
             </p>
           </div>
         </div>
@@ -358,34 +309,21 @@ export function ThemePreview() {
                 <CardDescription>بدنه، توضیح، فیلد و رابط</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p className="font-light">
-                  این ماه اجاره، خرید خانه و قبض‌ها را بین چهار نفر تقسیم کرده‌ایم.
-                </p>
-                <p className="font-normal">
-                  این ماه اجاره، خرید خانه و قبض‌ها را بین چهار نفر تقسیم کرده‌ایم.
-                </p>
-                <p className="font-medium">
-                  این ماه اجاره، خرید خانه و قبض‌ها را بین چهار نفر تقسیم کرده‌ایم.
-                </p>
-                <p className="font-bold">
-                  این ماه اجاره، خرید خانه و قبض‌ها را بین چهار نفر تقسیم کرده‌ایم.
-                </p>
+                <p className="font-light">این ماه اجاره، خرید خانه و قبض‌ها را بین چهار نفر تقسیم کرده‌ایم.</p>
+                <p className="font-normal">این ماه اجاره، خرید خانه و قبض‌ها را بین چهار نفر تقسیم کرده‌ایم.</p>
+                <p className="font-medium">این ماه اجاره، خرید خانه و قبض‌ها را بین چهار نفر تقسیم کرده‌ایم.</p>
+                <p className="font-bold">این ماه اجاره، خرید خانه و قبض‌ها را بین چهار نفر تقسیم کرده‌ایم.</p>
               </CardContent>
             </Card>
           </div>
         </Section>
 
-        <Section
-          title="خلاصه مالی"
-          description="سبز برای مانده مثبت، قرمز برای بدهی، و نارنجی برای امتیاز و نوبت."
-        >
+        <Section title="خلاصه مالی" description="سبز برای مانده مثبت، قرمز برای بدهی، و نارنجی برای امتیاز و نوبت.">
           <div className="grid gap-4 md:grid-cols-3">
             <Card>
               <CardHeader>
                 <CardDescription>مانده مثبت</CardDescription>
-                <CardTitle className="font-heading text-3xl font-bold text-success">
-                  ۱۲٬۴۸۰٬۰۰۰
-                </CardTitle>
+                <CardTitle className="font-heading text-3xl font-bold text-success">۱۲٬۴۸۰٬۰۰۰</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">تومان بستانکار در گروه ونک</p>
@@ -398,9 +336,7 @@ export function ThemePreview() {
             <Card>
               <CardHeader>
                 <CardDescription>بدهی مانده</CardDescription>
-                <CardTitle className="font-heading text-3xl font-bold text-destructive">
-                  ۳٬۲۵۰٬۰۰۰
-                </CardTitle>
+                <CardTitle className="font-heading text-3xl font-bold text-destructive">۳٬۲۵۰٬۰۰۰</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">تومان که هنوز پرداخت نشده</p>
@@ -438,10 +374,7 @@ export function ThemePreview() {
           </div>
         </Section>
 
-        <Section
-          title="دکمه‌ها"
-          description="گوشه‌ها کوتاه مانده‌اند تا دکمه‌ها نرم باشند، بدون انحنای زیاد."
-        >
+        <Section title="دکمه‌ها" description="گوشه‌ها کوتاه مانده‌اند تا دکمه‌ها نرم باشند، بدون انحنای زیاد.">
           <Card>
             <CardContent className="space-y-5">
               <div className="flex flex-wrap gap-2">
@@ -514,15 +447,11 @@ export function ThemePreview() {
                           </TableCell>
                           <TableCell>
                             {row.tone === "credit" ? (
-                              <Badge className="bg-success text-success-foreground">
-                                {row.status}
-                              </Badge>
+                              <Badge className="bg-success text-success-foreground">{row.status}</Badge>
                             ) : row.tone === "debt" ? (
                               <Badge variant="destructive">{row.status}</Badge>
                             ) : row.tone === "pending" ? (
-                              <Badge className="bg-accent text-accent-foreground">
-                                {row.status}
-                              </Badge>
+                              <Badge className="bg-accent text-accent-foreground">{row.status}</Badge>
                             ) : (
                               <Badge variant="outline">{row.status}</Badge>
                             )}
@@ -543,10 +472,7 @@ export function ThemePreview() {
           </Card>
         </Section>
 
-        <Section
-          title="فرم"
-          description="برچسب، ورودی، متن بلند، حالت خطا و حالت غیرفعال."
-        >
+        <Section title="فرم" description="برچسب، ورودی، متن بلند، حالت خطا و حالت غیرفعال.">
           <Card>
             <CardHeader>
               <CardTitle>ثبت هزینه</CardTitle>
@@ -560,10 +486,7 @@ export function ThemePreview() {
           </Card>
         </Section>
 
-        <Section
-          title="انتخاب‌ها"
-          description="فهرست، چک‌باکس، دکمه رادیویی و کلید، با برچسب فارسی."
-        >
+        <Section title="انتخاب‌ها" description="فهرست، چک‌باکس، دکمه رادیویی و کلید، با برچسب فارسی.">
           <div className="grid gap-4 lg:grid-cols-2">
             <Card>
               <CardHeader>
@@ -585,11 +508,7 @@ export function ThemePreview() {
                   </Select>
                 </Field>
                 <Field orientation="horizontal">
-                  <Checkbox
-                    id="remind"
-                    checked={remind}
-                    onCheckedChange={(checked) => setRemind(checked === true)}
-                  />
+                  <Checkbox id="remind" checked={remind} onCheckedChange={(checked) => setRemind(checked === true)} />
                   <FieldLabel htmlFor="remind">یادآوری قبل از سررسید</FieldLabel>
                 </Field>
                 <Field orientation="horizontal" data-invalid>
@@ -621,11 +540,7 @@ export function ThemePreview() {
                 </RadioGroup>
                 <Separator />
                 <Field orientation="horizontal">
-                  <Switch
-                    id="alerts"
-                    checked={alerts}
-                    onCheckedChange={setAlerts}
-                  />
+                  <Switch id="alerts" checked={alerts} onCheckedChange={setAlerts} />
                   <FieldLabel htmlFor="alerts">اعلان تراکنش‌ها</FieldLabel>
                 </Field>
                 <Field orientation="horizontal">
@@ -637,10 +552,7 @@ export function ThemePreview() {
           </div>
         </Section>
 
-        <Section
-          title="لایه‌ها و پیام‌ها"
-          description="گفتگو، هشدار، منو، راهنما و اعلان."
-        >
+        <Section title="لایه‌ها و پیام‌ها" description="گفتگو، هشدار، منو، راهنما و اعلان.">
           <div className="flex flex-wrap gap-2">
             <Dialog>
               <DialogTrigger asChild>
@@ -674,9 +586,7 @@ export function ThemePreview() {
               <PopoverContent align="start">
                 <PopoverHeader>
                   <PopoverTitle>نوبت خرید خانه</PopoverTitle>
-                  <PopoverDescription>
-                    با ثبت خرید بعدی ۴۰ امتیاز می‌گیرید و نوبت به نفر بعد می‌رسد.
-                  </PopoverDescription>
+                  <PopoverDescription>با ثبت خرید بعدی ۴۰ امتیاز می‌گیرید و نوبت به نفر بعد می‌رسد.</PopoverDescription>
                 </PopoverHeader>
               </PopoverContent>
             </Popover>
@@ -718,24 +628,17 @@ export function ThemePreview() {
             <Alert>
               <InfoIcon />
               <AlertTitle>تسویه این هفته کامل است</AlertTitle>
-              <AlertDescription>
-                سه نفر سهم خود را پرداخت کرده‌اند. فقط قبض برق مریم باز مانده است.
-              </AlertDescription>
+              <AlertDescription>سه نفر سهم خود را پرداخت کرده‌اند. فقط قبض برق مریم باز مانده است.</AlertDescription>
             </Alert>
             <Alert variant="destructive">
               <TriangleAlertIcon />
               <AlertTitle>بدهی سررسید گذشته</AlertTitle>
-              <AlertDescription>
-                ۲۱۰٬۰۰۰ تومان از قبض برق هنوز پرداخت نشده است.
-              </AlertDescription>
+              <AlertDescription>۲۱۰٬۰۰۰ تومان از قبض برق هنوز پرداخت نشده است.</AlertDescription>
             </Alert>
           </div>
         </Section>
 
-        <Section
-          title="وضعیت و بارگذاری"
-          description="نوار پیشرفت، لغزنده سهم، اسکلت و چرخش بارگذاری."
-        >
+        <Section title="وضعیت و بارگذاری" description="نوار پیشرفت، لغزنده سهم، اسکلت و چرخش بارگذاری.">
           <Card>
             <CardContent className="space-y-6">
               <div className="space-y-2">
@@ -750,12 +653,7 @@ export function ThemePreview() {
                   <span>سهم شما از شام</span>
                   <span className="font-heading font-semibold">{share[0]}٪</span>
                 </div>
-                <Slider
-                  value={share}
-                  max={100}
-                  step={5}
-                  onValueChange={setShare}
-                />
+                <Slider value={share} max={100} step={5} onValueChange={setShare} />
               </div>
               <div className="flex items-center gap-3">
                 <Spinner className="size-5" />
@@ -770,10 +668,7 @@ export function ThemePreview() {
           </Card>
         </Section>
 
-        <Section
-          title="اعضا و صفحه‌بندی"
-          description="چهره‌ها، جداکننده و حرکت بین صفحه‌های تراکنش."
-        >
+        <Section title="اعضا و صفحه‌بندی" description="چهره‌ها، جداکننده و حرکت بین صفحه‌های تراکنش.">
           <Card>
             <CardContent className="space-y-5">
               <div className="flex items-center gap-3">
@@ -832,9 +727,7 @@ export function ThemePreview() {
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
-              <p className="text-center text-sm text-muted-foreground">
-                صفحه {["۱", "۲", "۳"][page - 1]} از ۳
-              </p>
+              <p className="text-center text-sm text-muted-foreground">صفحه {["۱", "۲", "۳"][page - 1]} از ۳</p>
             </CardContent>
           </Card>
         </Section>

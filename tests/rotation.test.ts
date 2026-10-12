@@ -4,9 +4,35 @@ import { manuallySetSupervisor, refreshSupervisor } from "../src/features/superv
 import type { Room, RoomMember } from "../src/features/onboarding/types";
 import type { ChoreRotation } from "../src/features/tasks/types";
 
-const members: RoomMember[] = ["sara", "amir", "mary"].map((id) => ({ id, fullName: id, role: id === "sara" ? "owner" : "member", joinedAt: "۱۴۰۵/۰۷/۱۹", status: "active" }));
-const choreRotation: ChoreRotation = { seriesId: "clean", orderIds: ["sara", "amir", "mary"], lastAssignedId: "sara", generatedOccurrenceKeys: ["clean:2026-10-11"] };
-const room: Room = { id: "r1", code: "R1", name: "۱۲۴", capacity: 4, dormitory: { name: "آفتاب", university: "تهران" }, memberIds: members.map((member) => member.id), ownerId: "sara", members, currentSupervisorId: "sara", nextSupervisorId: "amir", supervisorPeriod: "", supervisorRotationOrder: ["sara", "amir", "mary"], supervisorAnchorDate: "2026-10-05", supervisorHistory: [] };
+const members: RoomMember[] = ["sara", "amir", "mary"].map((id) => ({
+  id,
+  fullName: id,
+  role: id === "sara" ? "owner" : "member",
+  joinedAt: "۱۴۰۵/۰۷/۱۹",
+  status: "active",
+}));
+const choreRotation: ChoreRotation = {
+  seriesId: "clean",
+  orderIds: ["sara", "amir", "mary"],
+  lastAssignedId: "sara",
+  generatedOccurrenceKeys: ["clean:2026-10-11"],
+};
+const room: Room = {
+  id: "r1",
+  code: "R1",
+  name: "۱۲۴",
+  capacity: 4,
+  dormitory: { name: "آفتاب", university: "تهران" },
+  memberIds: members.map((member) => member.id),
+  ownerId: "sara",
+  members,
+  currentSupervisorId: "sara",
+  nextSupervisorId: "amir",
+  supervisorPeriod: "",
+  supervisorRotationOrder: ["sara", "amir", "mary"],
+  supervisorAnchorDate: "2026-10-05",
+  supervisorHistory: [],
+};
 
 describe("rotation calculations", () => {
   test("chore assignments move fairly and skip members who left", () => {

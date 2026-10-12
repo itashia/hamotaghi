@@ -2,11 +2,15 @@
   "name": "app",
   "private": true,
   "version": "0.1.0",
+  "packageManager": "bun@1.3.14",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "bun test",
+    "format": "prettier --write .github/workflows/*.yml scripts/*.mjs src tests *.json *.md index.html public/manifest.webmanifest src-tauri/tauri.conf.json",
+    "format:check": "prettier --check .github/workflows/*.yml scripts/*.mjs src tests *.json *.md index.html public/manifest.webmanifest src-tauri/tauri.conf.json",
+    "icons": "bash scripts/generate-icons.sh",
     "preview": "vite preview",
     "tauri": "tauri"
   },
@@ -40,6 +44,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^6.0.2",
+    "prettier": "^3.9.10",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
     "vite": "^8.0.16"

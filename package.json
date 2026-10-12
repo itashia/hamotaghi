@@ -8,8 +8,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "bun test",
-    "format": "prettier --write .github/workflows/*.yml scripts/*.mjs src tests *.json *.md index.html public/manifest.webmanifest src-tauri/tauri.conf.json",
-    "format:check": "prettier --check .github/workflows/*.yml scripts/*.mjs src tests *.json *.md index.html public/manifest.webmanifest src-tauri/tauri.conf.json",
+    "format": "prettier --write .github/workflows/*.yml scripts/*.mjs src tests *.json *.md index.html public/manifest.webmanifest",
+    "format:check": "prettier --check .github/workflows/*.yml scripts/*.mjs src tests *.json *.md index.html public/manifest.webmanifest",
     "icons": "bash scripts/generate-icons.sh",
     "preview": "vite preview",
     "tauri": "tauri"
